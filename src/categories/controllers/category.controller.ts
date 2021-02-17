@@ -16,7 +16,7 @@ export class CategoryController {
     
     try {
 
-      const pagination: Pagination = new Pagination(response.locals.paginationData);
+      const pagination: Pagination = new Pagination(response.locals.pagination);
       const paginationDTO: IPaginationDTO = {
         size: pagination.getSize(),
         offset: pagination.getOffset(),
