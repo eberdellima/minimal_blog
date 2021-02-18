@@ -12,7 +12,7 @@ export class CategoryController {
     this.categoryManager = categoryManager;
   }
 
-  public async listCategories(request: Request, response: Response) {
+  public listCategories = async (request: Request, response: Response) => {
     
     try {
 
@@ -27,6 +27,7 @@ export class CategoryController {
       const [categories, total] = await this.categoryManager.getCategoryList(paginationDTO);
       response.status(200).send({categories, total});
     } catch(err) {
+      console.log(err);
       response.status(500).send({message: "Internal server error"});
     }
   }
