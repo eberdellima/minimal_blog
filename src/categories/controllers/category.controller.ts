@@ -12,7 +12,7 @@ export class CategoryController {
     this.categoryManager = categoryManager;
   }
 
-  public async listCategories(request: Request, response: Response) {
+  public listCategories = async (request: Request, response: Response) => {
     
     try {
 
