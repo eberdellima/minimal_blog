@@ -10,7 +10,7 @@ export class CategoryManager {
     this.categoryRepository = categoryRepository;
   }
 
-  public getCategoryList = async (paginationDTO: IPaginationDTO) => {
+  public async getCategoryList(paginationDTO: IPaginationDTO) {
     return this.categoryRepository.getCategories(paginationDTO);
   }
 }
