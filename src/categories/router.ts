@@ -18,4 +18,8 @@ export function configureRouter(router: Router) {
     paginationValidator.validate(),
     categoryController.listCategories,
   ]);
+
+  router.post('/', [
+    categoryController.addCategory,
+  ]);
 }
