@@ -1,3 +1,4 @@
+import { ICategoryDTO } from "../../categories/utilities/category.interface";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { Slugifier } from "../../common/utilities/slugifier";
 import { PostRepository } from "../repositories/post.repository";
@@ -63,9 +64,23 @@ export class PostManager {
   public deletePostById = async (postId: number) => {
 
     const post = await this.getPostById(postId);
-
     post.categories = [];
+
     await this.postRepository.save(post);
     return this.postRepository.delete({ id: postId });
+  }
+
+  public modifyPostCategories = async (postId: number, categories: ICategoryDTO[]) => {
+
+    const post = await this.getPostById(postId);
+    post.categories = [];
+
+    const postPartial = {
+      id: postId,
+      categories,
+    };
+
+    this.postRepository.merge(post, postPartial);
+    return this.postRepository.save(post);
   }
 }
