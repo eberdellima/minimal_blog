@@ -27,6 +27,7 @@ export class CategoryController {
 
       const [categories, total] = await this.categoryManager.getCategoryList(paginationDTO);
       response.status(200).send({categories, total});
+      
     } catch(err) {
       response.status(500).send({message: "Internal server error"});
     }
@@ -42,6 +43,7 @@ export class CategoryController {
 
       const { id, name } = await this.categoryManager.addCategory(categoryDto);
       response.status(201).send({ id, name });
+
     } catch(err) {
       response.status(500).send({message: "Internal server error"});
     }
