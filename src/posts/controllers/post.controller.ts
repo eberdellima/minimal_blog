@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
+import { PostNotFoundError } from "../utilities/post.errors";
 import { IPostDTO } from "../utilities/post.interface";
 
 
@@ -45,6 +46,31 @@ export class PostController {
     } catch(err) {
       console.log(err);
       response.status(500).send({message: "Internal server error"});
+    }
+  }
+
+  public modifyPost = async (request: Request, response: Response) => {
+
+    try {
+      
+      const postDto: IPostDTO = {
+        id: +request.params.postId,
+        ...request.body
+      };
+
+      const post = await this.postManager.updatePost(postDto);
+      response.status(200).send(post);
+
+    } catch(err) {
+
+      if (err instanceof PostNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+
+      response.status(500).send({ message: "Internal server error" });
     }
   }
 }

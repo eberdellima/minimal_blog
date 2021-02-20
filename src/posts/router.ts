@@ -33,5 +33,10 @@ export function configureRouter(router: Router) {
     postCategoriesMiddleware.validateCategoriesExist(),
     postController.addPost,
   ]);
+
+  router.patch('/:postId', [
+    postValidator.validateUpdateInput(),
+    postController.modifyPost,
+  ]);
   
 }

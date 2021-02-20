@@ -1,10 +1,10 @@
 import { BaseError } from "../../common/utilities/errors";
 
 
-export class CategoryNotFoundError extends BaseError {
+export class PostNotFoundError extends BaseError {
 
-  private _message: string = "Category not found";
-  private _type: string = "CategoryNotFoundError";
+  private _message: string = "Post not found";
+  private _type: string = "PostNotFoundError";
 
   constructor(message?: string) {
     super(message);

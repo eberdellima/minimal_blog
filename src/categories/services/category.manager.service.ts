@@ -46,7 +46,6 @@ export class CategoryManager {
 
     category.posts = [];
     await this.categoryRepository.save(category);
-
     return this.categoryRepository.delete({ id: categoryId });
   }
 }
