@@ -1,4 +1,4 @@
-import { EntityRepository, Repository } from "typeorm";
+import { EntityRepository, In, Repository } from "typeorm";
 import { Category } from "../models/category.entity";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 
@@ -22,5 +22,13 @@ export class CategoryRepository extends Repository<Category> {
     }
 
     return qb.getManyAndCount();
+  }
+
+  public async countCategoriesById(categoryIds: number[]) {
+    return this.count({
+      where: {
+        id: In(categoryIds),
+      }
+    });
   }
 }

@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
-import { PostManager } from "../services/post.manager";
+import { PostManager } from "../services/post.manager.service";
+import { IPostDTO } from "../utilities/post.interface";
 
 
 export class PostController {
@@ -28,6 +29,21 @@ export class PostController {
       response.status(200).send({posts, total});
       
     } catch(err) {
+      response.status(500).send({message: "Internal server error"});
+    }
+  }
+
+  public addPost = async (request: Request, response: Response) => {
+
+    try {
+
+      const postDto: IPostDTO = {...request.body};
+
+      const post = await this.postManager.addPost(postDto);
+      response.status(201).send(post);
+
+    } catch(err) {
+      console.log(err);
       response.status(500).send({message: "Internal server error"});
     }
   }

@@ -2,21 +2,34 @@ import { Router } from "express";
 import { getCustomRepository } from "typeorm";
 import { PaginationValidator } from "../common/middlewares/paginator.validator";
 import { PostController } from "./controllers/post.controller";
-import { PostManager } from "./services/post.manager";
+import { PostManager } from "./services/post.manager.service";
 import { PostRepository } from './repositories/post.repository';
+import { PostValidator } from "./middlewares/post.validator";
+import { PostCategoriesMiddleware } from "./middlewares/post.categories.middleware";
+import { CategoryRepository } from "../categories/repositories/category.repository";
 
 
 export function configureRouter(router: Router) {
 
   const paginationValidator = new PaginationValidator();
+  const postValidator = new PostValidator();
 
   const postRepository = getCustomRepository(PostRepository);
   const postManager = new PostManager(postRepository);
   const postController = new PostController(postManager);
 
+  const categoryRepository = getCustomRepository(CategoryRepository);
+  const postCategoriesMiddleware = new PostCategoriesMiddleware(categoryRepository);
+
   router.get('/', [
     paginationValidator.validate(),
     postController.listPosts,
+  ]);
+
+  router.post('/', [
+    postValidator.validateInsertInput(),
+    postCategoriesMiddleware.validateCategoriesExist(),
+    postController.addPost,
   ]);
   
 }
