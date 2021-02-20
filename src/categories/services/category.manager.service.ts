@@ -12,7 +12,7 @@ export class CategoryManager {
     this.categoryRepository = categoryRepository;
   }
 
-  private getCategoryById = async (categoryId: number) => {
+  public getCategoryById = async (categoryId: number) => {
 
     const category = await this.categoryRepository.findOne(categoryId);
 
