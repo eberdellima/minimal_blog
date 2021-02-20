@@ -1,6 +1,7 @@
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { Slugifier } from "../../common/utilities/slugifier";
 import { PostRepository } from "../repositories/post.repository";
+import { PostNotFoundError } from "../utilities/post.errors";
 import { IPostDTO } from "../utilities/post.interface";
 
 
@@ -28,7 +29,27 @@ export class PostManager {
       }
     }
 
+    postDto.title = postDto.title.trim();
+    postDto.description = postDto.description.trim();
+
     const newPost = this.postRepository.create(postDto);
     return this.postRepository.save(newPost);
+  }
+
+  public updatePost = async (postDto: IPostDTO) => {
+
+    const post = await this.postRepository.findOne(postDto.id);
+
+    if (post === undefined) {
+      throw new PostNotFoundError();
+    }
+
+    if (post.title !== postDto.title.trim()) {
+      postDto.slug = this.slugifier.slugify(postDto.title);
+    }
+
+    const updatedPost = this.postRepository.merge(post, postDto);
+
+    return this.postRepository.save(updatedPost);
   }
 }
