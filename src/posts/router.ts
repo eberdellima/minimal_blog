@@ -7,6 +7,7 @@ import { PostRepository } from './repositories/post.repository';
 import { PostValidator } from "./middlewares/post.validator";
 import { PostCategoriesMiddleware } from "./middlewares/post.categories.middleware";
 import { CategoryRepository } from "../categories/repositories/category.repository";
+import { NanoIdSlugifier } from "../common/utilities/slugifier";
 
 
 export function configureRouter(router: Router) {
@@ -14,8 +15,9 @@ export function configureRouter(router: Router) {
   const paginationValidator = new PaginationValidator();
   const postValidator = new PostValidator();
 
+  const nanoIdSlugifier = new NanoIdSlugifier();
   const postRepository = getCustomRepository(PostRepository);
-  const postManager = new PostManager(postRepository);
+  const postManager = new PostManager(postRepository, nanoIdSlugifier);
   const postController = new PostController(postManager);
 
   const categoryRepository = getCustomRepository(CategoryRepository);
