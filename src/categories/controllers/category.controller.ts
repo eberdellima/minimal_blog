@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { CategoryManager } from "../services/category.manager.service";
+import { CategoryNotFoundError } from "../utilities/category.errors";
 import { ICategoryDTO } from "../utilities/category.interface";
 
 
@@ -45,6 +46,31 @@ export class CategoryController {
       response.status(201).send({ id, name });
 
     } catch(err) {
+      response.status(500).send({message: "Internal server error"});
+    }
+  }
+
+  public modifyCategoryName = async (request: Request, response: Response) => {
+
+    try {
+
+      const categoryDto: ICategoryDTO = {
+        id: +request.params.categoryId,
+        name: request.body.name,
+      }
+
+      const { id, name } = await this.categoryManager.updateCategoryName(categoryDto);
+      response.status(201).send({ id, name });
+
+    } catch(err) {
+
+      if (err instanceof CategoryNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+
       response.status(500).send({message: "Internal server error"});
     }
   }
