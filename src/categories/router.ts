@@ -26,6 +26,10 @@ export function configureRouter(router: Router) {
     categoryController.addCategory,
   ]);
 
+  router.get('/:categoryId', [
+    categoryController.getCategory,
+  ]);
+
   router.patch('/:categoryId', [
     categoryValidator.validateUpdateInput(),
     categoryController.modifyCategoryName,

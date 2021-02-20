@@ -50,6 +50,32 @@ export class CategoryController {
     }
   }
 
+  public getCategory = async (request: Request, response: Response) => {
+
+    try {
+
+      const categoryId = +request.params.categoryId;
+
+      if (isNaN(categoryId)) {
+        return response.status(404).send({ message: "Invalid request" });
+      }
+
+      const category = await this.categoryManager.getCategoryById(categoryId);
+      response.status(200).send(category);
+
+    } catch(err) {
+
+      if (err instanceof CategoryNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+
+      response.status(500).send({message: "Internal server error"});
+    }
+  }
+
   public modifyCategoryName = async (request: Request, response: Response) => {
 
     try {
