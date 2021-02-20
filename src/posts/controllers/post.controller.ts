@@ -99,4 +99,30 @@ export class PostController {
       response.status(500).send({ message: "Internal server error" });
     }
   }
+
+  public deletePost = async (request: Request, response: Response) => {
+
+    try {
+
+      const postId: number = +request.params.postId;
+
+      if (isNaN(postId)) {
+        return response.status(400).send("Invalid request");
+      }
+
+      await this.postManager.deletePostById(postId);
+      response.status(204).send();
+
+    } catch(err) {
+
+      if (err instanceof PostNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+      
+      response.status(500).send({message: "Internal server error"});
+    }
+  }
 }
