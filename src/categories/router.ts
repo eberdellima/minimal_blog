@@ -30,4 +30,8 @@ export function configureRouter(router: Router) {
     categoryValidator.validateUpdateInput(),
     categoryController.modifyCategoryName,
   ]);
+
+  router.delete('/:categoryId', [
+    categoryController.deleteCategory,
+  ]);
 }

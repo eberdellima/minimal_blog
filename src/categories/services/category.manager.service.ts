@@ -12,6 +12,17 @@ export class CategoryManager {
     this.categoryRepository = categoryRepository;
   }
 
+  private getCategoryById = async (categoryId: number) => {
+
+    const category = await this.categoryRepository.findOne(categoryId);
+
+    if (category === undefined) {
+      throw new CategoryNotFoundError();
+    }
+
+    return category;
+  }
+
   public getCategoryList = async (paginationDTO: IPaginationDTO) => {
     return this.categoryRepository.getCategories(paginationDTO);
   }
@@ -23,13 +34,19 @@ export class CategoryManager {
 
   public updateCategoryName = async (categoryDto: ICategoryDTO) => {
 
-    const category = await this.categoryRepository.findOne(categoryDto.id);
-
-    if (category === undefined) {
-      throw new CategoryNotFoundError();
-    }
-
+    const category = await this.getCategoryById(categoryDto.id);
     const updatedCategory = this.categoryRepository.merge(category, categoryDto);
+
     return this.categoryRepository.save(updatedCategory);
+  }
+
+  public deleteCategoryById = async (categoryId: number) => {
+
+    const category = await this.getCategoryById(categoryId);
+
+    category.posts = [];
+    await this.categoryRepository.save(category);
+
+    return this.categoryRepository.delete({ id: categoryId });
   }
 }

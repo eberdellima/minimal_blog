@@ -74,4 +74,30 @@ export class CategoryController {
       response.status(500).send({message: "Internal server error"});
     }
   }
+
+  public deleteCategory = async (request: Request, response: Response) => {
+
+    try {
+
+      const categoryId: number = +request.params.categoryId;
+
+      if (isNaN(categoryId)) {
+        return response.status(400).send("Invalid request");
+      }
+
+      await this.categoryManager.deleteCategoryById(categoryId);
+      response.status(204).send();
+
+    } catch(err) {
+
+      if (err instanceof CategoryNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+      
+      response.status(500).send({message: "Internal server error"});
+    }
+  }
 }
