@@ -27,7 +27,7 @@ export function configureRouter(router: Router) {
   ]);
 
   router.get('/:categoryId', [
-    
+    categoryController.getCategory,
   ]);
 
   router.patch('/:categoryId', [
