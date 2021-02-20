@@ -49,6 +49,32 @@ export class PostController {
     }
   }
 
+  public getPost = async (request: Request, response: Response) => {
+
+    try {
+      
+      const postId = +request.params.postId;
+
+      if (isNaN(postId)) {
+        return response.status(404).send({ message: "Invalid request" }); 
+      }
+
+      const post = await this.postManager.getPostById(postId);
+      response.status(200).send(post);
+
+    } catch(err) {
+
+      if (err instanceof PostNotFoundError) {
+        return response.status(404).send({
+          message: err.message,
+          type: err.type
+        });
+      }
+
+      response.status(500).send({ message: "Internal server error" });
+    }
+  }
+
   public modifyPost = async (request: Request, response: Response) => {
 
     try {
