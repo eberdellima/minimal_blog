@@ -22,4 +22,10 @@ export class PostRepository extends Repository<Post> {
 
     return qb.getManyAndCount();
   }
+
+  public async getPostBySlug(slug: string) {
+    return this.findOne({
+      where: { slug }
+    });
+  }
 }
