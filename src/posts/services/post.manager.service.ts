@@ -15,6 +15,17 @@ export class PostManager {
     this.slugifier = slugifier;
   }
 
+  public getPostById = async (postId: number) => {
+
+    const post = await this.postRepository.findOne(postId);
+
+    if (post === undefined) {
+      throw new PostNotFoundError();
+    }
+
+    return post;
+  }
+
   public getPostList = async (paginationDto: IPaginationDTO) => {
     return this.postRepository.getPosts(paginationDto);
   }
@@ -38,11 +49,7 @@ export class PostManager {
 
   public updatePost = async (postDto: IPostDTO) => {
 
-    const post = await this.postRepository.findOne(postDto.id);
-
-    if (post === undefined) {
-      throw new PostNotFoundError();
-    }
+    const post = await this.getPostById(postDto.id);
 
     if (post.title !== postDto.title.trim()) {
       postDto.slug = this.slugifier.slugify(postDto.title);

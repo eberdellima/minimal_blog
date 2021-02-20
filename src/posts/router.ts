@@ -34,6 +34,10 @@ export function configureRouter(router: Router) {
     postController.addPost,
   ]);
 
+  router.get('/:postId', [
+    postController.getPost,
+  ]);
+
   router.patch('/:postId', [
     postValidator.validateUpdateInput(),
     postController.modifyPost,
