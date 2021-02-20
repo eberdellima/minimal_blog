@@ -43,4 +43,7 @@ export function configureRouter(router: Router) {
     postController.modifyPost,
   ]);
   
+  router.delete('/postId', [
+    postController.deletePost,
+  ]);
 }

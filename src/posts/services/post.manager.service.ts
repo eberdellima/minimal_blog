@@ -59,4 +59,13 @@ export class PostManager {
 
     return this.postRepository.save(updatedPost);
   }
+
+  public deletePostById = async (postId: number) => {
+
+    const post = await this.getPostById(postId);
+
+    post.categories = [];
+    await this.postRepository.save(post);
+    return this.postRepository.delete({ id: postId });
+  }
 }
