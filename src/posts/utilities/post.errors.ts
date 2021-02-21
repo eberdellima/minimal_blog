@@ -17,6 +17,6 @@ export class PostAlreadyExistsError extends HttpBadRequestError {
     
     this._message = "post already exists";
     this._type = "PostAlreadyExists";
-    this._code = 400;
+    this._code = 409;
   }
 }
