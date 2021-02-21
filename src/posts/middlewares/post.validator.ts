@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
+import { ValidationError } from "../../common/utilities/validation.errors";
 
 
 export class PostValidator {
@@ -26,10 +27,9 @@ export class PostValidator {
       const { error } = schema.validate(request.body, { abortEarly: false });
 
       if (error) {
-        return response.status(400).send({
-           message: "Valiation error" ,
-           details: error.details
-        });
+        const validationError = new ValidationError();
+        validationError.details = error.details;
+        return response.status(validationError.code).send(validationError.getErrorResponse());
       }
 
       next();
@@ -54,10 +54,9 @@ export class PostValidator {
       const { error } = schema.validate(updateInput, { abortEarly: false });
 
       if (error) {
-        return response.status(400).send({
-           message: "Valiation error" ,
-           details: error.details
-        });
+        const validationError = new ValidationError();
+        validationError.details = error.details;
+        return response.status(validationError.code).send(validationError.getErrorResponse());
       }
 
       next();

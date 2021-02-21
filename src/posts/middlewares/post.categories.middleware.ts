@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { CategoryRepository } from "../../categories/repositories/category.repository";
 import { ICategoryDTO } from "../../categories/utilities/category.interface";
+import { HttpBadRequestError } from "../../common/utilities/http.errors";
 
 
 export class PostCategoriesMiddleware {
@@ -25,7 +26,8 @@ export class PostCategoriesMiddleware {
       const categoriesCount = await this.categoryRepository.countCategoriesById(categoryIds);
 
       if (categoriesCount !== filteredCategories.length) {
-        return response.status(400).send({ message: "Invalid request" });
+        const badRequestError = new HttpBadRequestError("categories do not exist");
+        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
       }
 
       request.body.categories = filteredCategories;

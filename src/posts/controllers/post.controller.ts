@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
@@ -30,7 +31,8 @@ export class PostController {
       response.status(200).send({posts, total});
       
     } catch(err) {
-      response.status(500).send({message: "Internal server error"});
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 
@@ -44,7 +46,8 @@ export class PostController {
       response.status(201).send(post);
 
     } catch(err) {
-      response.status(500).send({message: "Internal server error"});
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 
@@ -55,7 +58,8 @@ export class PostController {
       const postId = +request.params.postId;
 
       if (isNaN(postId)) {
-        return response.status(404).send({ message: "Invalid request" }); 
+        const badRequestError = new HttpBadRequestError();
+        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
       }
 
       const post = await this.postManager.getPostById(postId);
@@ -64,13 +68,11 @@ export class PostController {
     } catch(err) {
 
       if (err instanceof PostNotFoundError) {
-        return response.status(404).send({
-          message: err.message,
-          type: err.type
-        });
+        return response.status(err.code).send(err.getErrorResponse());
       }
 
-      response.status(500).send({ message: "Internal server error" });
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 
@@ -89,13 +91,11 @@ export class PostController {
     } catch(err) {
 
       if (err instanceof PostNotFoundError) {
-        return response.status(404).send({
-          message: err.message,
-          type: err.type
-        });
+        return response.status(err.code).send(err.getErrorResponse());
       }
 
-      response.status(500).send({ message: "Internal server error" });
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 
@@ -106,7 +106,8 @@ export class PostController {
       const postId: number = +request.params.postId;
 
       if (isNaN(postId)) {
-        return response.status(400).send("Invalid request");
+        const badRequestError = new HttpBadRequestError();
+        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
       }
 
       await this.postManager.deletePostById(postId);
@@ -115,13 +116,11 @@ export class PostController {
     } catch(err) {
 
       if (err instanceof PostNotFoundError) {
-        return response.status(404).send({
-          message: err.message,
-          type: err.type
-        });
+        return response.status(err.code).send(err.getErrorResponse());
       }
       
-      response.status(500).send({message: "Internal server error"});
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 }

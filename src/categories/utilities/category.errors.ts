@@ -1,24 +1,12 @@
-import { BaseError } from "../../common/utilities/errors";
+import { HttpNotFoundError } from "../../common/utilities/http.errors";
 
 
-export class CategoryNotFoundError extends BaseError {
-
-  private _message: string = "Category not found";
-  private _type: string = "CategoryNotFoundError";
-
+export class CategoryNotFoundError extends HttpNotFoundError {
   constructor(message?: string) {
-    super(message);
-  }
-
-  get message(): string {
-    return this._message;
-  }
-
-  set message(message: string) {
-    this._message = message;
-  }
-
-  get type(): string {
-    return this._type;
+    super(message)
+    
+    this._message = "category not found";
+    this._type = "CategoryNotFoundError";
+    this._code = 404;
   }
 }
