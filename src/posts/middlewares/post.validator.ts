@@ -41,8 +41,8 @@ export class PostValidator {
 
       const schema: Joi.ObjectSchema = this.validator.object({
         id: this.validator.number().integer().positive().required(),
-        title: this.validator.string().min(5).max(121).required(),
-        description: this.validator.string().not("").required(),
+        title: this.validator.string().min(5).max(121).optional(),
+        description: this.validator.string().not("").optional(),
       });
 
       const updateInput = {

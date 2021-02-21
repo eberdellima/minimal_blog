@@ -3,7 +3,7 @@ import { HttpBadRequestError, HttpInternalServerError } from "../../common/utili
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
-import { PostNotFoundError } from "../utilities/post.errors";
+import { PostAlreadyExistsError, PostNotFoundError } from "../utilities/post.errors";
 import { IPostDTO } from "../utilities/post.interface";
 
 
@@ -46,6 +46,11 @@ export class PostController {
       response.status(201).send(post);
 
     } catch(err) {
+
+      if (err instanceof PostAlreadyExistsError) {
+        return response.status(err.code).send(err.getErrorResponse());
+      }
+
       const serverError = new HttpInternalServerError();
       response.status(serverError.code).send(serverError.getErrorResponse());
     }
