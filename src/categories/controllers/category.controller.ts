@@ -3,7 +3,7 @@ import { HttpBadRequestError, HttpInternalServerError } from "../../common/utili
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { CategoryManager } from "../services/category.manager.service";
-import { CategoryNotFoundError } from "../utilities/category.errors";
+import { CategoryAlreadyExistsError, CategoryNotFoundError } from "../utilities/category.errors";
 import { ICategoryDTO } from "../utilities/category.interface";
 
 
@@ -48,6 +48,11 @@ export class CategoryController {
       response.status(201).send(category);
 
     } catch(err) {
+
+      if (err instanceof CategoryAlreadyExistsError) {
+        return response.status(err.code).send(err.getErrorResponse());
+      }
+
       const serverError = new HttpInternalServerError();
       response.status(serverError.code).send(serverError.getErrorResponse());
     }
@@ -88,7 +93,7 @@ export class CategoryController {
       }
 
       const category = await this.categoryManager.updateCategoryName(categoryDto);
-      response.status(201).send(category);
+      response.status(200).send(category);
 
     } catch(err) {
 
