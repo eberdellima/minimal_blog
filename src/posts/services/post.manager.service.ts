@@ -18,7 +18,9 @@ export class PostManager {
 
   public getPostById = async (postId: number) => {
 
-    const post = await this.postRepository.findOne(postId);
+    const post = await this.postRepository.findOne(postId, {
+      relations: ["categories"]
+    });
 
     if (post === undefined) {
       throw new PostNotFoundError();
@@ -39,6 +41,8 @@ export class PostManager {
       if (postExists) {
         postDto.slug = this.slugifier.slugify(postDto.title);
       }
+    } else {
+      postDto.slug = this.slugifier.slugify(postDto.title);
     }
 
     postDto.title = postDto.title.trim();
@@ -57,7 +61,6 @@ export class PostManager {
     }
 
     const updatedPost = this.postRepository.merge(post, postDto);
-
     return this.postRepository.save(updatedPost);
   }
 

@@ -22,7 +22,7 @@ export class Post {
   @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
   updatedAt: Date;
 
-  @Column({type: 'timestamp', nullable: true})
+  @Column({type: 'timestamp', nullable: true, select: false})
   deletedAt: Date;
 
   @ManyToMany(() => Category, category => category.posts, {

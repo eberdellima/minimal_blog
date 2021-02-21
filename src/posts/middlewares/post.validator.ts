@@ -47,7 +47,7 @@ export class PostValidator {
 
       const updateInput = {
         id: +request.params.postId,
-        name: request.body.title,
+        title: request.body.title,
         description: request.body.description,
       }
 
