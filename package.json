@@ -9,7 +9,7 @@
     "migration:run": "npm run typeorm -- migration:run",
     "migration:show": "npm run typeorm -- migration:show",
     "tsc": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "typeorm": "./node_modules/typeorm/cli.js",
     "jest:configure": "./node_modules/ts-jest/cli.js -- config:init"
   },
