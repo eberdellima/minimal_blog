@@ -44,7 +44,6 @@ export class PostController {
       response.status(201).send(post);
 
     } catch(err) {
-      console.log(err);
       response.status(500).send({message: "Internal server error"});
     }
   }

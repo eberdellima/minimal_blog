@@ -42,8 +42,8 @@ export class CategoryController {
         name: request.body.name,
       }
 
-      const { id, name } = await this.categoryManager.addCategory(categoryDto);
-      response.status(201).send({ id, name });
+      const category = await this.categoryManager.addCategory(categoryDto);
+      response.status(201).send(category);
 
     } catch(err) {
       response.status(500).send({message: "Internal server error"});
@@ -85,8 +85,8 @@ export class CategoryController {
         name: request.body.name,
       }
 
-      const { id, name } = await this.categoryManager.updateCategoryName(categoryDto);
-      response.status(201).send({ id, name });
+      const category = await this.categoryManager.updateCategoryName(categoryDto);
+      response.status(201).send(category);
 
     } catch(err) {
 

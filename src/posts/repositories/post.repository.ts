@@ -20,7 +20,9 @@ export class PostRepository extends Repository<Post> {
       qb.orderBy(paginationDTO.orderBy, paginationDTO.orderDirection);
     }
 
-    return qb.getManyAndCount();
+    return qb.leftJoinAndMapMany("p.categories", "p.categories", "categories")
+      .orderBy("p.createdAt", "DESC")
+      .getManyAndCount();
   }
 
   public async getPostBySlug(slug: string) {

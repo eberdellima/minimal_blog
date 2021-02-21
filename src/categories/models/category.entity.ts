@@ -10,10 +10,10 @@ export class Category {
   @Column({type: 'varchar', length: 30})
   name: string;
 
-  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', select: false})
   createdAt: Date;
 
-  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+  @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', select: false})
   updatedAt: Date;
 
   @ManyToMany(() => Post, post => post.categories)
