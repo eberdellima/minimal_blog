@@ -1,24 +1,12 @@
-import { BaseError } from "../../common/utilities/errors";
+import { HttpNotFoundError } from "../../common/utilities/http.errors";
 
 
-export class PostNotFoundError extends BaseError {
-
-  private _message: string = "Post not found";
-  private _type: string = "PostNotFoundError";
-
+export class PostNotFoundError extends HttpNotFoundError {
   constructor(message?: string) {
-    super(message);
-  }
-
-  get message(): string {
-    return this._message;
-  }
-
-  set message(message: string) {
-    this._message = message;
-  }
-
-  get type(): string {
-    return this._type;
+    super(message)
+    
+    this._message = "post not found";
+    this._type = "PostNotFoundError";
+    this._code = 404;
   }
 }

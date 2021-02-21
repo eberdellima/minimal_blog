@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ICategoryDTO } from "../../categories/utilities/category.interface";
+import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
 import { PostManager } from "../services/post.manager.service";
 import { PostNotFoundError } from "../utilities/post.errors";
 
@@ -20,7 +21,8 @@ export class PostCategoriesController {
       const categories: ICategoryDTO[] = request.body.categories;
 
       if (isNaN(postId)) {
-        return response.status(400).send("Invalid request");
+        const badRequestError = new HttpBadRequestError();
+        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
       }
 
       const updatedPost = await this.postManager.modifyPostCategories(postId, categories);
@@ -29,13 +31,11 @@ export class PostCategoriesController {
     } catch(err) {
 
       if (err instanceof PostNotFoundError) {
-        return response.status(404).send({
-          message: err.message,
-          type: err.type
-        });
+        return response.status(err.code).send(err.getErrorResponse());
       }
       
-      response.status(500).send({message: "Internal server error"});
+      const serverError = new HttpInternalServerError();
+      response.status(serverError.code).send(serverError.getErrorResponse());
     }
   }
 }
