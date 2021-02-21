@@ -30,4 +30,10 @@ export class PostRepository extends Repository<Post> {
       where: { slug }
     });
   }
+
+  public async getPostByTitle(title: string) {
+    return this.findOne({
+      where: { title }
+    })
+  }
 }

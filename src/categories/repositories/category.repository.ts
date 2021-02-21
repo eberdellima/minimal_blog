@@ -31,4 +31,10 @@ export class CategoryRepository extends Repository<Category> {
       }
     });
   }
+
+  public async getCategoryByName(name: string) {
+    return this.findOne({
+      where: { name }
+    });
+  }
 }

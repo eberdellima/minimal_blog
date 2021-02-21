@@ -2,7 +2,7 @@ import { ICategoryDTO } from "../../categories/utilities/category.interface";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { Slugifier } from "../../common/utilities/slugifier";
 import { PostRepository } from "../repositories/post.repository";
-import { PostNotFoundError } from "../utilities/post.errors";
+import { PostAlreadyExistsError, PostNotFoundError } from "../utilities/post.errors";
 import { IPostDTO } from "../utilities/post.interface";
 
 
@@ -35,18 +35,24 @@ export class PostManager {
 
   public addPost = async (postDto: IPostDTO) => {
 
-    if (postDto.slug) {
-      const postExists = await this.postRepository.getPostBySlug(postDto.slug);
+    postDto.title = postDto.title.trim();
+    postDto.description = postDto.description.trim();
 
-      if (postExists) {
+    const sameTitlePost = await this.postRepository.getPostByTitle(postDto.title);
+
+    if (sameTitlePost) {
+      throw new PostAlreadyExistsError();
+    }
+
+    if (postDto.slug) {
+      const sameSlugPost = await this.postRepository.getPostBySlug(postDto.slug);
+
+      if (sameSlugPost) {
         postDto.slug = this.slugifier.slugify(postDto.title);
       }
     } else {
       postDto.slug = this.slugifier.slugify(postDto.title);
     }
-
-    postDto.title = postDto.title.trim();
-    postDto.description = postDto.description.trim();
 
     const newPost = this.postRepository.create(postDto);
     return this.postRepository.save(newPost);

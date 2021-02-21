@@ -1,7 +1,7 @@
 import { CategoryRepository } from "../repositories/category.repository";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { ICategoryDTO } from "../utilities/category.interface";
-import { CategoryNotFoundError } from "../utilities/category.errors";
+import { CategoryAlreadyExistsError, CategoryNotFoundError } from "../utilities/category.errors";
 
 
 export class CategoryManager {
@@ -28,6 +28,13 @@ export class CategoryManager {
   }
 
   public addCategory = async (categoryDto: ICategoryDTO) => {
+
+    const sameNameCategory = await this.categoryRepository.getCategoryByName(categoryDto.name);
+
+    if (sameNameCategory) {
+      throw new CategoryAlreadyExistsError();
+    }
+
     const newCategory = this.categoryRepository.create(categoryDto);
     return this.categoryRepository.save(newCategory);
   }
