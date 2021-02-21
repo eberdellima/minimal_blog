@@ -1,22 +1,48 @@
-{
-  "type": "mysql",
-  "host": "localhost",
-  "port": 3306,
-  "username": "user",
-  "password": "Ergi@1aa",
-  "database": "minimal_blog",
-  "synchronize": true,
-  "logging": false,
-  "entities": [
-     "dist/**/*.entity.js"
-  ],
-  "migrations": [
-     "dist/migrations/*.js"
-  ],
-  "subscribers": [
-     "dist/**/*.subscriber.js"
-  ],
-  "cli": {
-     "migrationsDir": "src/migrations"
-  }
-}
+[
+   {
+      "name": "default",
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3306,
+      "username": "root",
+      "password": "Ergi@1aa",
+      "database": "minimal_blog",
+      "synchronize": true,
+      "logging": false,
+      "entities": [
+         "dist/**/*.entity.js"
+      ],
+      "migrations": [
+         "dist/migrations/*.js"
+      ],
+      "subscribers": [
+         "dist/**/*.subscriber.js"
+      ],
+      "cli": {
+         "migrationsDir": "src/migrations"
+      }
+   },
+   {
+      "name": "test",
+      "type": "mysql",
+      "host": "localhost",
+      "port": 3306,
+      "username": "root",
+      "password": "Ergi@1aa",
+      "database": "minimal_blog_test",
+      "synchronize": true,
+      "logging": false,
+      "entities": [
+         "src/**/*.entity.ts"
+      ],
+      "migrations": [
+         "dist/migrations/*.js"
+      ],
+      "subscribers": [
+         "dist/**/*.subscriber.js"
+      ],
+      "cli": {
+         "migrationsDir": "src/migrations"
+      }
+   }
+]

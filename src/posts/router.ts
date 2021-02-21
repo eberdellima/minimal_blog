@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCustomRepository } from "typeorm";
+import { Connection } from "typeorm";
 import { PaginationValidator } from "../common/middlewares/paginator.validator";
 import { PostController } from "./controllers/post.controller";
 import { PostManager } from "./services/post.manager.service";
@@ -12,14 +12,14 @@ import { NanoIdSlugifier } from "../common/utilities/slugifier";
 import { PostCategoriesController } from "./controllers/post.categories.controller";
 
 
-export function configureRouter(router: Router) {
+export function configureRouter(router: Router, connection: Connection) {
 
   const paginationValidator = new PaginationValidator();
   const postValidator = new PostValidator();
   const postCategoriesValidator = new PostCategoriesValidator();
   
-  const postRepository = getCustomRepository(PostRepository);
-  const categoryRepository = getCustomRepository(CategoryRepository);
+  const postRepository = connection.getCustomRepository(PostRepository);
+  const categoryRepository = connection.getCustomRepository(CategoryRepository);
 
   const postCategoriesMiddleware = new PostCategoriesMiddleware(categoryRepository);
   

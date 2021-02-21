@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCustomRepository } from "typeorm";
+import { Connection } from "typeorm";
 import { PaginationValidator } from "../common/middlewares/paginator.validator";
 import { CategoryController } from './controllers/category.controller';
 import { CategoryValidator } from "./middlewares/category.validator";
@@ -7,12 +7,12 @@ import { CategoryRepository } from './repositories/category.repository';
 import { CategoryManager } from './services/category.manager.service';
 
 
-export function configureRouter(router: Router) {
+export function configureRouter(router: Router, connection: Connection) {
 
   const paginationValidator = new PaginationValidator();
   const categoryValidator = new CategoryValidator();
 
-  const categoryRepository = getCustomRepository(CategoryRepository);
+  const categoryRepository = connection.getCustomRepository(CategoryRepository);
   const categoryManager = new CategoryManager(categoryRepository);
   const categoryController = new CategoryController(categoryManager);
 
