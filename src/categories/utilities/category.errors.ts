@@ -17,6 +17,6 @@ export class CategoryAlreadyExistsError extends HttpBadRequestError {
     
     this._message = "category already exists";
     this._type = "CategoryAlreadyExists";
-    this._code = 400;
+    this._code = 409;
   }
 }
