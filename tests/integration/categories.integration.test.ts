@@ -55,12 +55,12 @@ describe("testing categories router", () => {
 
       const response = await supertest(app).post('/categories').send({ name: newCategory.name });
 
+      await categoryRepository.delete({ id: response.body.id });
+
       expect(response.status).toBe(201);
       expect(response.body).toBeDefined();
       expect(response.body.id).toBeDefined();
       expect(response.body.name).toEqual(newCategory.name);
-
-      await categoryRepository.delete({ id: response.body.id });
     });
 
     test("should throw validation error", async() => {
@@ -76,9 +76,9 @@ describe("testing categories router", () => {
 
       const response = await supertest(app).post('/categories').send({ name: oldCategory.name });
 
-      expect(response.status).toBe(409);
-
       await categoryRepository.delete(oldCategory);
+
+      expect(response.status).toBe(409);
     });
   });
 
@@ -110,12 +110,12 @@ describe("testing categories router", () => {
       const newName = "modified name";
       const response = await supertest(app).patch('/categories/' + newCategory.id).send({ name: newName });
 
+      await categoryRepository.delete({ id: newCategory.id});
+
       expect(response.status).toBe(200);
       expect(response.body).toBeDefined();
       expect(response.body.id).toEqual(newCategory.id);
       expect(response.body.name).toEqual(newName);
-
-      await categoryRepository.delete({ id: newCategory.id});
     });
 
     test("should throw validation error", async () => {

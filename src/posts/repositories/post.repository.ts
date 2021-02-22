@@ -17,11 +17,10 @@ export class PostRepository extends Repository<Post> {
     }
 
     if (paginationDTO.orderBy) {
-      qb.orderBy(paginationDTO.orderBy, paginationDTO.orderDirection);
+      qb.orderBy('p.' + paginationDTO.orderBy, paginationDTO.orderDirection);
     }
 
     return qb.leftJoinAndMapMany("p.categories", "p.categories", "categories")
-      .orderBy("p.createdAt", "DESC")
       .getManyAndCount();
   }
 
