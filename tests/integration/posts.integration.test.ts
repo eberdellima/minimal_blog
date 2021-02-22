@@ -41,6 +41,8 @@ describe("testing posts router", () => {
 
       const response = await supertest(app).get('/posts');
 
+      await postRepository.delete({ id: post.id });
+
       expect(response.status).toBe(200);
       expect(response.body).toBeDefined();
       expect(response.body.posts).toBeDefined();
@@ -56,8 +58,6 @@ describe("testing posts router", () => {
       expect(response.body.posts[0].updatedAt).toBeDefined();
       expect(response.body.posts[0].categories).toBeDefined();
       expect(response.body.posts[0].categories.length).toEqual(0);
-
-      await postRepository.delete({ id: post.id });
     });
   });
 
@@ -148,6 +148,8 @@ describe("testing posts router", () => {
 
       const response = await supertest(app).get('/posts/' + post.id);
 
+      await postRepository.delete({ id: post.id });
+
       expect(response.status).toBe(200);
       expect(response.body).toBeDefined();
       expect(response.body.id).toEqual(post.id);
@@ -158,9 +160,6 @@ describe("testing posts router", () => {
       expect(response.body.updatedAt).toBeDefined();
       expect(response.body.categories).toBeDefined();
       expect(response.body.categories.length).toBe(0);
-
-      await postRepository.delete({ id: post.id });
-
     });
 
     test("should throw bad request error for incorrect id", async () => {
