@@ -5,6 +5,7 @@ import { loadServerConfiguration } from '../../src/loaders/server';
 import { loadRouters } from '../../src/loaders/router';
 import { PostRepository } from "../../src/posts/repositories/post.repository";
 import { CategoryRepository } from "../../src/categories/repositories/category.repository";
+import { CONNECTION_NAME } from "../utilities/connection.name.enum";
 
 jest.useFakeTimers();
 
@@ -17,7 +18,7 @@ describe("testing posts router", () => {
   const app = express();
 
   beforeAll(async () => {
-    connection = await createConnection("test");
+    connection = await createConnection(CONNECTION_NAME.TEST);
 
     loadServerConfiguration(app);
     loadRouters(app, connection);
