@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
+import { BaseController } from "../../common/controllers/base.controller";
+import { HttpBadRequestError } from "../../common/utilities/http.errors";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { CategoryManager } from "../services/category.manager.service";
@@ -7,11 +8,12 @@ import { CategoryAlreadyExistsError, CategoryNotFoundError } from "../utilities/
 import { ICategoryDTO } from "../utilities/category.interface";
 
 
-export class CategoryController {
+export class CategoryController extends BaseController {
 
   private readonly categoryManager: CategoryManager;
 
   constructor(categoryManager: CategoryManager) {
+    super();
     this.categoryManager = categoryManager;
   }
 
@@ -31,8 +33,7 @@ export class CategoryController {
       response.status(200).send({categories, total});
       
     } catch(err) {
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -53,8 +54,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -78,8 +78,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -101,8 +100,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -126,8 +124,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
       
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 }
