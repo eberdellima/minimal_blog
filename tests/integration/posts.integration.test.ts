@@ -163,13 +163,6 @@ describe("testing posts router", () => {
       expect(response.body.categories.length).toBe(0);
     });
 
-    test("should throw bad request error for incorrect id", async () => {
-
-      const response = await supertest(app).get('/posts/new-category');
-
-      expect(response.status).toBe(400);
-    });
-
     test("should throw post not found error", async () => {
 
       const post = await postRepository.save({
@@ -271,13 +264,6 @@ describe("testing posts router", () => {
       expect(fetchedPost).toBeUndefined();
     });
 
-    test("should throw bad request error on invalid id", async () => {
-
-      const response = await supertest(app).delete('/posts/post-to-delete');
-
-      expect(response.status).toBe(400);
-    });
-
     test("should throw post not found error", async () => {
 
       const post = await postRepository.save({
@@ -336,24 +322,6 @@ describe("testing posts router", () => {
       await postRepository.delete({ id: post.id });
 
       expect(response.status).toBe(404);
-    });
-
-    test("should throw bad request error on invalid post id", async () => {
-
-      const category = await categoryRepository.save({ name: "sample category" });
-
-      const categoryData = [
-        {
-          id: category.id,
-          name: category.name,
-        },
-      ];
-
-      const response = await supertest(app).patch('/posts/post-to-update/categories').send({ categories: categoryData });
-
-      await categoryRepository.delete({ id: category.id });
-
-      expect(response.status).toBe(400);
     });
 
     test("should throw post not found error", async () => {

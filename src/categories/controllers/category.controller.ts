@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
+import { BaseController } from "../../common/controllers/base.controller";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { CategoryManager } from "../services/category.manager.service";
@@ -7,11 +7,12 @@ import { CategoryAlreadyExistsError, CategoryNotFoundError } from "../utilities/
 import { ICategoryDTO } from "../utilities/category.interface";
 
 
-export class CategoryController {
+export class CategoryController extends BaseController {
 
   private readonly categoryManager: CategoryManager;
 
   constructor(categoryManager: CategoryManager) {
+    super();
     this.categoryManager = categoryManager;
   }
 
@@ -31,8 +32,7 @@ export class CategoryController {
       response.status(200).send({categories, total});
       
     } catch(err) {
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -53,8 +53,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -62,14 +61,7 @@ export class CategoryController {
 
     try {
 
-      const categoryId = +request.params.categoryId;
-
-      if (isNaN(categoryId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      const category = await this.categoryManager.getCategoryById(categoryId);
+      const category = await this.categoryManager.getCategoryById(+request.params.categoryId);
       response.status(200).send(category);
 
     } catch(err) {
@@ -78,8 +70,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -101,8 +92,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -110,14 +100,7 @@ export class CategoryController {
 
     try {
 
-      const categoryId: number = +request.params.categoryId;
-
-      if (isNaN(categoryId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      await this.categoryManager.deleteCategoryById(categoryId);
+      await this.categoryManager.deleteCategoryById(+request.params.categoryId);
       response.status(204).send();
 
     } catch(err) {
@@ -126,8 +109,7 @@ export class CategoryController {
         return response.status(err.code).send(err.getErrorResponse());
       }
       
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 }

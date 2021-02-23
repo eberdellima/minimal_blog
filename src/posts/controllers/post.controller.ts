@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
+import { BaseController } from "../../common/controllers/base.controller";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
@@ -7,11 +7,12 @@ import { PostAlreadyExistsError, PostNotFoundError } from "../utilities/post.err
 import { IPostDTO } from "../utilities/post.interface";
 
 
-export class PostController {
+export class PostController extends BaseController{
 
   private readonly postManager: PostManager;
 
   constructor(postManager: PostManager) {
+    super();
     this.postManager = postManager;
   }
 
@@ -31,8 +32,7 @@ export class PostController {
       response.status(200).send({posts, total});
       
     } catch(err) {
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -51,8 +51,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -60,14 +59,7 @@ export class PostController {
 
     try {
       
-      const postId = +request.params.postId;
-
-      if (isNaN(postId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      const post = await this.postManager.getPostById(postId);
+      const post = await this.postManager.getPostById(+request.params.postId);
       response.status(200).send(post);
 
     } catch(err) {
@@ -76,8 +68,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -99,8 +90,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -108,14 +98,7 @@ export class PostController {
 
     try {
 
-      const postId: number = +request.params.postId;
-
-      if (isNaN(postId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      await this.postManager.deletePostById(postId);
+      await this.postManager.deletePostById(+request.params.postId);
       response.status(204).send();
 
     } catch(err) {
@@ -124,8 +107,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
       
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 }
