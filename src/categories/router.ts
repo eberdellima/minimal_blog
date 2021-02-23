@@ -26,16 +26,16 @@ export function configureRouter(router: Router, connection: Connection) {
     categoryController.addCategory,
   ]);
 
-  router.get('/:categoryId', [
+  router.get('/:categoryId(\\d+)', [
     categoryController.getCategory,
   ]);
 
-  router.patch('/:categoryId', [
+  router.patch('/:categoryId(\\d+)', [
     categoryValidator.validateUpdateInput(),
     categoryController.modifyCategoryName,
   ]);
 
-  router.delete('/:categoryId', [
+  router.delete('/:categoryId(\\d+)', [
     categoryController.deleteCategory,
   ]);
 }
