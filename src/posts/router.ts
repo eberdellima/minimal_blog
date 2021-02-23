@@ -41,20 +41,20 @@ export function configureRouter(router: Router, connection: Connection) {
     postController.addPost,
   ]);
 
-  router.get('/:postId', [
+  router.get('/:postId(\\d+)', [
     postController.getPost,
   ]);
 
-  router.patch('/:postId', [
+  router.patch('/:postId(\\d+)', [
     postValidator.validateUpdateInput(),
     postController.modifyPost,
   ]);
   
-  router.delete('/:postId', [
+  router.delete('/:postId(\\d+)', [
     postController.deletePost,
   ]);
 
-  router.patch('/:postId/categories', [
+  router.patch('/:postId(\\d+)/categories', [
     postCategoriesValidator.validatePostCategoriesInput(),
     postCategoriesMiddleware.validateCategoriesExist(),
     postCategoriesController.updatePostCategories,

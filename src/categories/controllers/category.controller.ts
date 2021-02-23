@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/controllers/base.controller";
-import { HttpBadRequestError } from "../../common/utilities/http.errors";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { CategoryManager } from "../services/category.manager.service";
@@ -62,14 +61,7 @@ export class CategoryController extends BaseController {
 
     try {
 
-      const categoryId = +request.params.categoryId;
-
-      if (isNaN(categoryId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      const category = await this.categoryManager.getCategoryById(categoryId);
+      const category = await this.categoryManager.getCategoryById(+request.params.categoryId);
       response.status(200).send(category);
 
     } catch(err) {
@@ -108,14 +100,7 @@ export class CategoryController extends BaseController {
 
     try {
 
-      const categoryId: number = +request.params.categoryId;
-
-      if (isNaN(categoryId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      await this.categoryManager.deleteCategoryById(categoryId);
+      await this.categoryManager.deleteCategoryById(+request.params.categoryId);
       response.status(204).send();
 
     } catch(err) {

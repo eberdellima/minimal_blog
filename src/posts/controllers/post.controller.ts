@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../common/controllers/base.controller";
-import { HttpBadRequestError } from "../../common/utilities/http.errors";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
@@ -60,14 +59,7 @@ export class PostController extends BaseController{
 
     try {
       
-      const postId = +request.params.postId;
-
-      if (isNaN(postId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      const post = await this.postManager.getPostById(postId);
+      const post = await this.postManager.getPostById(+request.params.postId);
       response.status(200).send(post);
 
     } catch(err) {
@@ -106,14 +98,7 @@ export class PostController extends BaseController{
 
     try {
 
-      const postId: number = +request.params.postId;
-
-      if (isNaN(postId)) {
-        const badRequestError = new HttpBadRequestError();
-        return response.status(badRequestError.code).send(badRequestError.getErrorResponse());
-      }
-
-      await this.postManager.deletePostById(postId);
+      await this.postManager.deletePostById(+request.params.postId);
       response.status(204).send();
 
     } catch(err) {

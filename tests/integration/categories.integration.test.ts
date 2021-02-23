@@ -151,13 +151,6 @@ describe("testing categories router", () => {
       expect(fetchedCategoryResult).toBeUndefined();
     });
 
-    test("should throw bad request error", async () => {
-
-      const response = await supertest(app).delete('/categories/new-category');
-
-      expect(response.status).toBe(400);
-    });
-
     test("should throw not found error", async () => {
 
       const newCategory = await categoryRepository.save({ name: "first name" });
