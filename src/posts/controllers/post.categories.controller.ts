@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
 import { ICategoryDTO } from "../../categories/utilities/category.interface";
-import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
+import { BaseController } from "../../common/controllers/base.controller";
+import { HttpBadRequestError } from "../../common/utilities/http.errors";
 import { PostManager } from "../services/post.manager.service";
 import { PostNotFoundError } from "../utilities/post.errors";
 
 
-export class PostCategoriesController {
+export class PostCategoriesController extends BaseController {
 
   private readonly postManager: PostManager;
 
   constructor(postManager: PostManager) {
+    super();
     this.postManager = postManager;
   }
 
@@ -34,8 +36,7 @@ export class PostCategoriesController {
         return response.status(err.code).send(err.getErrorResponse());
       }
       
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { HttpBadRequestError, HttpInternalServerError } from "../../common/utilities/http.errors";
+import { BaseController } from "../../common/controllers/base.controller";
+import { HttpBadRequestError } from "../../common/utilities/http.errors";
 import { Pagination } from "../../common/utilities/pagination";
 import { IPaginationDTO } from "../../common/utilities/pagination.interface";
 import { PostManager } from "../services/post.manager.service";
@@ -7,11 +8,12 @@ import { PostAlreadyExistsError, PostNotFoundError } from "../utilities/post.err
 import { IPostDTO } from "../utilities/post.interface";
 
 
-export class PostController {
+export class PostController extends BaseController{
 
   private readonly postManager: PostManager;
 
   constructor(postManager: PostManager) {
+    super();
     this.postManager = postManager;
   }
 
@@ -31,8 +33,7 @@ export class PostController {
       response.status(200).send({posts, total});
       
     } catch(err) {
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -51,8 +52,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -76,8 +76,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -99,8 +98,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
 
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 
@@ -124,8 +122,7 @@ export class PostController {
         return response.status(err.code).send(err.getErrorResponse());
       }
       
-      const serverError = new HttpInternalServerError();
-      response.status(serverError.code).send(serverError.getErrorResponse());
+      response.status(this.internalServerError.code).send(this.internalServerError.getErrorResponse());
     }
   }
 }
