@@ -29,3 +29,13 @@ export class HttpBadRequestError extends HttpError {
     this._code = 400;
   }
 }
+
+export class HttpConflictError extends HttpError {
+  constructor(message?: string) {
+    super(message)
+    
+    this._message = message ? message : "conflict";
+    this._type = "ConflictError";
+    this._code = 409;
+  }
+}
